@@ -1,4 +1,6 @@
 <div>
-    <h1>Counter is : {{(data$ |async)?.counter}}</h1><br>
-    <h2>ChannelName is : {{(data$ | async)?.channelName}}</h2>
+    <!-- <h1>Counter is : {{(data$ |async)?.counter}}</h1><br>
+    <h2>ChannelName is : {{(data$ | async)?.channelName}}</h2> -->
+    <h1>Counter is : {{ counter$ | async }}</h1>
+    <h1>ChannelName is : {{ channelName$ | async }}</h1>
 </div>
