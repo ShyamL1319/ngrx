@@ -24,7 +24,6 @@ export class EditPostComponent implements OnInit, OnDestroy {
       const id = params.get('id');
       this.postSubcription = this.store.select(getPostById, { id }).subscribe((post) => { 
         this.post = post;
-        console.log(this.post)
         this.createForm();
       })
     })
