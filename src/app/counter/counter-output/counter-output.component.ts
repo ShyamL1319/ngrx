@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { AppState } from 'src/app/store/app.state';
 import { getChannelName, getCounter } from '../store/counter.selectors';
 import { CounterState } from '../store/counter.state';
 
@@ -13,7 +14,7 @@ export class CounterOutputComponent implements OnInit {
   counter$!: Observable<{ counter: number }>;
   channelName$!: Observable<{ channelName: string }>;
   data$!: Observable<CounterState>;
-  constructor(private store: Store<{counter:CounterState}>) { }
+  constructor(private store: Store<AppState>) { }
 
   ngOnInit(): void {
     // this.data$ = this.store.select('counter');
