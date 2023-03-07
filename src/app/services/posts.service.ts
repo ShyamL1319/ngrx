@@ -17,12 +17,16 @@ export class PostsService {
           const posts: Post[] = [];
           for (let key in data) { 
             if (data[key]) { 
-                posts.push({...data[key]})
+                posts.push({...data[key], id: key})
             }
           }
           return posts;
         })
       )
   }
+
+  addPost(post: Post): Observable<{name:string}> {
+    return this.http.post<{name:string}>(`https://myprojectdemo-2f5f5-default-rtdb.firebaseio.com/posts.json`, {...post})
+   }
 }
 
