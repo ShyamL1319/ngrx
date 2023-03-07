@@ -14,6 +14,7 @@ import { LoadingSpinnerComponent } from './shared/components/loading-spinner/loa
 import { sharedReducer } from './store/shared/shared.reducer';
 import { SHARED_STATE_NAME } from './store/shared/shared.selector';
 import { appReducer } from './store/app.state';
+import { AuthEffects } from './auth/store/auth.effects';
 
 @NgModule({
   declarations: [
@@ -26,11 +27,10 @@ import { appReducer } from './store/app.state';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    EffectsModule.forRoot([]),
+    EffectsModule.forRoot([AuthEffects]),
     StoreModule.forRoot(appReducer),
     StoreDevtoolsModule.instrument({
-      maxAge: 25, // Retains last 25 states
-      logOnly: environment.production, // Restrict extension to log-only mode
+      logOnly: environment.production
     })
   ],
   providers: [],
