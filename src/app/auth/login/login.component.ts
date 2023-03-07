@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { Login } from 'src/app/models/auth.model';
 import { AppState } from 'src/app/store/app.state';
+import { loginStart } from '../store/auth.actions';
+import { AuthState } from '../store/auth.state';
 
 @Component({
   selector: 'app-login',
@@ -23,10 +24,12 @@ export class LoginComponent implements OnInit {
 
   onLogin() { 
     if (this.loginForm.invalid) return;
-    const loginDetails: Login = {
+    const loginDetails = {
       email: this.loginForm.value.email,
       password:this.loginForm.value.password
     }
+
+    this.store.dispatch(loginStart(loginDetails));
   }
 
 }
