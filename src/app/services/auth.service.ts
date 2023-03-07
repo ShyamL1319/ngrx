@@ -1,9 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { logout } from '../auth/store/auth.actions';
 import { AuthResponse } from '../models/auth-response.model';
 import { User } from '../models/user.model';
+import { AppState } from '../store/app.state';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +14,7 @@ import { User } from '../models/user.model';
 export class AuthService {
 
   timeoutInterval: any;
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private store:Store<AppState>) { }
   
 
   login(email: string, password: string):Observable<AuthResponse> { 
@@ -25,6 +28,14 @@ export class AuthService {
     return this.http.post<AuthResponse>(
       `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${environment.FIREBASE_API_KEY}`,
       {email,password, returnSecureToken:true})
+  }
+
+  logout() { 
+    localStorage.removeItem('userData');
+    if (this.timeoutInterval) { 
+      clearTimeout(this.timeoutInterval);
+      this.timeoutInterval = null;
+    }
   }
 
   formatUser(data: AuthResponse) { 
@@ -59,6 +70,7 @@ export class AuthService {
     const timeInterval = expirationDate - todayDate;
     this.timeoutInterval =  setTimeout(() => {
       //:TODO logout functionality or get the refresh token
+      this.store.dispatch(logout());
      }, timeInterval);
   }
     getUserFromLocalStorage() {
