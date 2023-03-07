@@ -7,7 +7,7 @@ import { User } from "src/app/models/user.model";
 import { AuthService } from "src/app/services/auth.service";
 import { AppState } from "src/app/store/app.state";
 import { setErrosMessage, setLoading } from "src/app/store/shared/shared.actions";
-import { loginStart, loginSucess } from "./auth.actions";
+import { loginStart, loginSucess, signupStart, signupSuccess } from "./auth.actions";
 
 @Injectable()
 export class AuthEffects { 
@@ -39,12 +39,36 @@ export class AuthEffects {
             })
         )
     )
-    loginRedirect$ = createEffect(
+    authRedirect$ = createEffect(
         () => this.actions$.pipe(
-            ofType(loginSucess),
+            ofType(loginSucess,signupSuccess),
             tap((action) => { 
+                this.store.dispatch(setErrosMessage({ message: '' }));                
                 this.router.navigate(['/']);
             })
         ),
         { dispatch: false });
+    
+    signup$ = createEffect(
+        () => this.actions$.pipe(
+            ofType(signupStart),
+            exhaustMap((action) => {
+                return this.authService
+                    .signup(action.email, action.password)
+                    .pipe(
+                        map(data => { 
+                            this.store.dispatch(setLoading({ status: false }));
+                            this.store.dispatch(setErrosMessage({ message: '' }));
+                            const user:User = this.authService.formatUser(data);
+                            return signupSuccess({ user });
+                        }),
+                        catchError((errResp) => {
+                            this.store.dispatch(setLoading({status:false}))
+                            const errMessage = this.authService.getErrorMessage(errResp.error.error.message)
+                            return of(setErrosMessage({message:errMessage}));                            
+                        })
+                    )
+            })
+        )
+    );
 }

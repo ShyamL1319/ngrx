@@ -6,5 +6,5 @@ export interface AuthResponse {
     kind: string;
     localId: string;
     refreshToken: string;
-    registered: boolean;
+    registered?: boolean;
 }
