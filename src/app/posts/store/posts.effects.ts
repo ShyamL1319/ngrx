@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { map, mergeMap, Observable, of } from "rxjs";
+import { distinct, distinctUntilKeyChanged, first, map, mergeMap, Observable, of, switchMap } from "rxjs";
 import { PostsService } from "src/app/services/posts.service";
-import { addPost, addPostSuccess, loadPosts, loadPostsSuccess } from "./posts.actions";
+import { addPost, addPostSuccess, deletePost, deletePostSuccess, loadPosts, loadPostsSuccess, updatePost, updatePostSuccess } from "./posts.actions";
 
 @Injectable()
 export class PostsEffects { 
@@ -26,11 +26,10 @@ export class PostsEffects {
     addPost$ = createEffect(() => this.action$
         .pipe(
             ofType(addPost),
-            mergeMap(action => { 
+            switchMap(action => { 
                 return this.postsService.addPost(action.post)
                     .pipe(
                         map((data) => { 
-                            console.log(data);
                             const post = { ...action.post, id: data.name };
                             return addPostSuccess({ post });
                         })
@@ -38,4 +37,32 @@ export class PostsEffects {
             })
         )
     )
+
+    updatePost$ = createEffect(() =>
+        this.action$.pipe(
+            ofType(updatePost),
+            switchMap((action) => { 
+                return this.postsService
+                    .updatePost(action.post).pipe(
+                        map((data) => { 
+                            return updatePostSuccess({post:action.post})
+                        })
+                    );
+            })
+        )
+    )
+    delete$ = createEffect(() =>
+        this.action$.pipe(
+            ofType(deletePost),
+            switchMap((action) => {
+                return this.postsService
+                    .deletePost(action.id).pipe(
+                        map((data) => {
+                            return deletePostSuccess({ id: action.id })
+                        })
+                    );
+            })
+        )
+    )
+    // TODO:- delete is calling infinitly the deleteAction some how need to resolve
 }

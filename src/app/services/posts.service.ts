@@ -26,7 +26,18 @@ export class PostsService {
   }
 
   addPost(post: Post): Observable<{name:string}> {
-    return this.http.post<{name:string}>(`https://myprojectdemo-2f5f5-default-rtdb.firebaseio.com/posts.json`, {...post})
-   }
+    return this.http.post<{name:string}>(`https://myprojectdemo-2f5f5-default-rtdb.firebaseio.com/posts.json`, post)
+  }
+  
+  updatePost(post: Post): Observable<any> { 
+    const postData = {
+      [post.id]: {title:post.title, description:post.description}
+    }
+    return this.http.patch<any>(`https://myprojectdemo-2f5f5-default-rtdb.firebaseio.com/posts.json`,postData)
+  }
+
+  deletePost(id: string) { 
+    return this.http.delete(`https://myprojectdemo-2f5f5-default-rtdb.firebaseio.com/posts/${id}.json`);
+  }
 }
 
