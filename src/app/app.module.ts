@@ -11,13 +11,11 @@ import { HomeComponent } from './home/home.component';
 import { HeaderComponent } from './shared/components/header/header.component';
 import { environment } from 'src/environments/environment';
 import { LoadingSpinnerComponent } from './shared/components/loading-spinner/loading-spinner.component';
-import { sharedReducer } from './store/shared/shared.reducer';
-import { SHARED_STATE_NAME } from './store/shared/shared.selector';
 import { appReducer } from './store/app.state';
 import { AuthEffects } from './auth/store/auth.effects';
 import { AuthInterceptor } from './shared/interceptor/auth.interceptor';
 import { LoadingInterceptor } from './shared/interceptor/loading.interceptor';
-
+import { StoreRouterConnectingModule } from "@ngrx/router-store"
 @NgModule({
   declarations: [
     AppComponent,
@@ -31,9 +29,10 @@ import { LoadingInterceptor } from './shared/interceptor/loading.interceptor';
     HttpClientModule,
     EffectsModule.forRoot([AuthEffects]),
     StoreModule.forRoot(appReducer),
+    StoreRouterConnectingModule.forRoot(),
     StoreDevtoolsModule.instrument({
       logOnly: environment.production
-    })
+    }),
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,
