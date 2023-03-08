@@ -4,7 +4,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EffectsModule } from '@ngrx/effects';
-import { AuthEffects } from './store/auth.effects';
 import { SignupComponent } from './signup/signup.component';
 
 

@@ -2,10 +2,9 @@ import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { Store } from "@ngrx/store";
-import { distinct, distinctUntilKeyChanged, first, map, mergeMap, Observable, of, switchMap, take, tap } from "rxjs";
+import { map, mergeMap, switchMap, take, tap } from "rxjs";
 import { PostsService } from "src/app/services/posts.service";
 import { AppState } from "src/app/store/app.state";
-import { setErrosMessage, setLoading } from "src/app/store/shared/shared.actions";
 import { addPost, addPostSuccess, deletePost, deletePostSuccess, loadPosts, loadPostsSuccess, updatePost, updatePostSuccess } from "./posts.actions";
 
 @Injectable()
