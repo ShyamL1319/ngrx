@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { first, Subscription } from 'rxjs';
+import { first, Subscription, take } from 'rxjs';
 import { Post } from 'src/app/models/post.model';
 import { AppState } from 'src/app/store/app.state';
 import { updatePost } from '../store/posts.actions';
@@ -22,7 +22,7 @@ export class EditPostComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => { 
       const id = params.get('id');
-      this.postSubcription = this.store.select(getPostById, { id }).pipe(first()).subscribe((post) => { 
+      this.postSubcription = this.store.select(getPostById, { id }).pipe(take(1)).subscribe((post) => { 
         this.post = post;
         this.createForm();
       })
