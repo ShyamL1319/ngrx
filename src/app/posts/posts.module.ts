@@ -10,6 +10,7 @@ import { PostlistComponent } from "./postlist/postlist.component";
 import { PostsEffects } from "./store/posts.effects";
 import { postReducer } from "./store/posts.reducer";
 import { POST_STATE_NAME } from "./store/posts.selector";
+import { SignglePostComponent } from './signgle-post/signgle-post.component';
 
 const routes: Routes = [
       {
@@ -26,7 +27,8 @@ const routes: Routes = [
     declarations: [
         PostlistComponent,
         AddPostComponent,
-        EditPostComponent
+        EditPostComponent,
+        SignglePostComponent
     ],
     imports: [
         CommonModule,

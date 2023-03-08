@@ -5,22 +5,23 @@
             <a href="#" class="btn btn-primary" [routerLink]="['/posts/add']">Add Post</a>
         </div>
         <table class="table table-striped border" *ngIf="(posts$|async) as postData">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Title</th>
-                    <th>Description</th>
-                    <th>Actions</th>
+            <thead class="bg-info">
+                <tr class="border">
+                    <th class="border">ID</th>
+                    <th class="border">Title</th>
+                    <th class="border">Description</th>
+                    <th class="border">Actions</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let post of postData">
-                    <td>{{ post.id }}</td>
-                    <td>{{ post.title }}</td>
-                    <td>{{ post.description }}</td>
-                    <td>
+                <tr *ngFor="let post of postData" class="border">
+                    <td class="border" >{{ post.id }}</td>
+                    <td class="border" >{{ post.title }}</td>
+                    <td class="border" >{{ post.description }}</td>
+                    <td class="border" >
                         <a href="" class="btn btn-primary" [routerLink]="['edit',post.id]">Update</a> <br/>
-                        <button class="btn btn-danger  mt-2" (click)="onDeletePost(post.id)"> Delete</button>
+                        <button class="btn btn-danger  mt-2" (click)="onDeletePost(post.id)"> Delete</button><br/>
+                        <a href="" class="btn btn-success mt-2" [routerLink]="['details',post.id]">Details</a> <br />
                     </td>
                 </tr>
             </tbody>

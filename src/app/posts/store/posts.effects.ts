@@ -1,8 +1,11 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
+import { Update } from "@ngrx/entity";
+import { RouterNavigatedAction, ROUTER_NAVIGATION } from "@ngrx/router-store";
 import { Store } from "@ngrx/store";
-import { map, mergeMap, switchMap, take, tap } from "rxjs";
+import { filter, map, mergeMap, switchMap, take, tap } from "rxjs";
+import { Post } from "src/app/models/post.model";
 import { PostsService } from "src/app/services/posts.service";
 import { AppState } from "src/app/store/app.state";
 import { addPost, addPostSuccess, deletePost, deletePostSuccess, loadPosts, loadPostsSuccess, updatePost, updatePostSuccess } from "./posts.actions";
@@ -53,7 +56,11 @@ export class PostsEffects {
                 return this.postsService
                     .updatePost(action.post).pipe(
                         map((data) => { 
-                            return updatePostSuccess({post:action.post})
+                            const updatedPost: Update<Post> = {
+                                id: action.post.id,
+                                changes: {...action.post}
+                            }
+                            return updatePostSuccess({ post : updatedPost });
                         })
                     );
             })
@@ -81,5 +88,26 @@ export class PostsEffects {
             this.router.navigate(['/posts']);
         })
     ),
-    { dispatch: false });
+        { dispatch: false });
+    
+    singlePost$ = createEffect(
+        () => this.action$.pipe(
+            ofType(ROUTER_NAVIGATION),
+            filter((r: RouterNavigatedAction) => { 
+                return r.payload.routerState.url.startsWith('/posts/details')
+            }),
+            map((r: RouterNavigatedAction) => { 
+                return r.payload.routerState['params']['id']
+            }),
+            switchMap(id => { 
+                return this.postsService.getPostById(id)
+                    .pipe(
+                        map((post) => { 
+                            const postData = [{ ...post, id }];
+                            return loadPostsSuccess({posts:postData})
+                        })
+                    )
+            })
+        )
+    )
 }
