@@ -16,6 +16,7 @@ import { SHARED_STATE_NAME } from './store/shared/shared.selector';
 import { appReducer } from './store/app.state';
 import { AuthEffects } from './auth/store/auth.effects';
 import { AuthInterceptor } from './shared/interceptor/auth.interceptor';
+import { LoadingInterceptor } from './shared/interceptor/loading.interceptor';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,10 @@ import { AuthInterceptor } from './shared/interceptor/auth.interceptor';
   providers: [{
     provide: HTTP_INTERCEPTORS,
     useClass: AuthInterceptor,
+    multi:true
+  },{
+    provide: HTTP_INTERCEPTORS,
+    useClass: LoadingInterceptor,
     multi:true
   }],
   bootstrap: [AppComponent]

@@ -3,6 +3,7 @@ import { Store } from '@ngrx/store';
 import { distinctUntilChanged, first, last, Observable } from 'rxjs';
 import { Post } from 'src/app/models/post.model';
 import { AppState } from 'src/app/store/app.state';
+import { setLoading } from 'src/app/store/shared/shared.actions';
 import { deletePost, loadPosts } from '../store/posts.actions';
 import { getPosts } from '../store/posts.selector';
 

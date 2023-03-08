@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { ActionsSubject, Store } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import { catchError, exhaustMap, map, mergeMap, of, tap } from "rxjs";
 import { User } from "src/app/models/user.model";
 import { AuthService } from "src/app/services/auth.service";
@@ -25,7 +25,6 @@ export class AuthEffects {
                     .login(action.email, action.password)
                     .pipe(
                         map(data => {
-                            this.store.dispatch(setLoading({ status: false }));
                             this.store.dispatch(setErrosMessage({ message: '' }));
                             const user: User = this.authService.formatUser(data);
                             this.authService.setUserInLocalStorage(user);
@@ -60,7 +59,6 @@ export class AuthEffects {
                     .signup(action.email, action.password)
                     .pipe(
                         map(data => { 
-                            this.store.dispatch(setLoading({ status: false }));
                             this.store.dispatch(setErrosMessage({ message: '' }));
                             const user:User = this.authService.formatUser(data);
                             this.authService.setUserInLocalStorage(user);

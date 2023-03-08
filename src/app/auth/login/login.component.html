@@ -5,7 +5,7 @@
         <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
             <div class="mb-3">
                 <label for="email">Email</label>
-                <input type="text" name="email" id="email" class="form-control" formControlName="email" autocomplete="off">
+                <input type="text" name="email" id="email" class="form-control" formControlName="email" autocomplete="off" placeholder="email">
                 <div *ngIf="loginForm.get('email').touched && loginForm.get('email').invalid" class="text-danger">
                     <div *ngIf="loginForm.get('email').errors && loginForm.get('email').errors.email">
                         Please enter valid email type.
@@ -18,7 +18,7 @@
             </div>
             <div class="mb-3">
                 <label for="password">Password</label>
-                <input type="password" name="password" id="password" class="form-control" formControlName="password">
+                <input type="password" name="password" id="password" class="form-control" formControlName="password" placeholder="password">
                 <div *ngIf="loginForm.get('password').touched && loginForm.get('password').invalid" class="text-danger">
                     <div *ngIf="loginForm.get('password').errors && loginForm.get('password').errors.required">
                         Password is required.
