@@ -16,6 +16,7 @@ import { AuthEffects } from './auth/store/auth.effects';
 import { AuthInterceptor } from './shared/interceptor/auth.interceptor';
 import { LoadingInterceptor } from './shared/interceptor/loading.interceptor';
 import { StoreRouterConnectingModule } from "@ngrx/router-store"
+import { CustomSerializer } from './store/router/custom-serializer';
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,7 +30,9 @@ import { StoreRouterConnectingModule } from "@ngrx/router-store"
     HttpClientModule,
     EffectsModule.forRoot([AuthEffects]),
     StoreModule.forRoot(appReducer),
-    StoreRouterConnectingModule.forRoot(),
+    StoreRouterConnectingModule.forRoot({
+      serializer:CustomSerializer
+    }),
     StoreDevtoolsModule.instrument({
       logOnly: environment.production
     }),

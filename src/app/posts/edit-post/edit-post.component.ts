@@ -20,13 +20,19 @@ export class EditPostComponent implements OnInit, OnDestroy {
   constructor(private route:ActivatedRoute, private store:Store<AppState>) { }
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe(params => { 
-      const id = params.get('id');
-      this.postSubcription = this.store.select(getPostById, { id }).pipe(take(1)).subscribe((post) => { 
-        this.post = post;
-        this.createForm();
-      })
-    })
+    this.createForm();
+    this.postSubcription =
+      this.store.select(getPostById)
+        .subscribe(
+          (post) => {
+            this.post = post;
+            if (post) {
+              this.postForm.patchValue({
+                title: post.title,
+                description: post.description,
+              })
+            }
+          });
   }
 
   onUpdatePost() {
@@ -41,8 +47,8 @@ export class EditPostComponent implements OnInit, OnDestroy {
 
   createForm() { 
     this.postForm = new FormGroup({
-      title: new FormControl(this.post.title, [Validators.required, Validators.minLength(6)]),
-      description: new FormControl(this.post.description, [Validators.required, Validators.minLength(10)])
+      title: new FormControl(null, [Validators.required, Validators.minLength(6)]),
+      description: new FormControl(null, [Validators.required, Validators.minLength(10)])
     })
   }
 
