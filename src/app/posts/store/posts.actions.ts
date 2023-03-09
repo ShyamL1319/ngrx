@@ -11,6 +11,8 @@ export const DELETE_POST_SUCCESS = '[posts page] delete post';
 export const LOAD_POSTS = '[posts page] load posts';
 export const LOAD_POSTS_SUCCESS = '[posts page] load post success';
 
+export const DUMMY_ACTION = '[post page] dummy post';
+
 export const addPost = createAction(ADD_POST_ACTION, props<{ post: Post }>());
 export const addPostSuccess = createAction(ADD_POST_SUCCESS, props<{ post:Post }>())
 export const updatePost = createAction(UPDATE_POST_ACTION, props<{ post: Post }>());
@@ -24,3 +26,5 @@ export const loadPostsSuccess = createAction(
     LOAD_POSTS_SUCCESS,
     props<{ posts: Post[] }>()
 );
+
+export const dummyAction = createAction(DUMMY_ACTION);

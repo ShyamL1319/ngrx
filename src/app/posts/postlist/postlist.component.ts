@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { Post } from 'src/app/models/post.model';
 import { AppState } from 'src/app/store/app.state';
 import { deletePost, loadPosts } from '../store/posts.actions';
-import { getPosts } from '../store/posts.selector';
+import { getPostCount, getPosts, getPostsEntities } from '../store/posts.selector';
 
 @Component({
   selector: 'app-postlist',
@@ -13,11 +13,13 @@ import { getPosts } from '../store/posts.selector';
 })
 export class PostlistComponent implements OnInit {
   posts$!: Observable<Post[]>;
+  postCount$: Observable<Post | number>;
   constructor(private store:Store<AppState>) { }
 
   ngOnInit(): void {
     this.posts$ = this.store.select(getPosts);
     this.store.dispatch(loadPosts());
+    this.postCount$ = this.store.select(getPostCount);
   }
 
   onDeletePost(postId) {

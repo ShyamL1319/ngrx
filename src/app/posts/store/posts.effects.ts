@@ -4,11 +4,12 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { Update } from "@ngrx/entity";
 import { RouterNavigatedAction, ROUTER_NAVIGATION } from "@ngrx/router-store";
 import { Store } from "@ngrx/store";
-import { filter, map, mergeMap, switchMap, take, tap } from "rxjs";
+import { filter, map, mergeMap, of, switchMap, take, tap, withLatestFrom } from "rxjs";
 import { Post } from "src/app/models/post.model";
 import { PostsService } from "src/app/services/posts.service";
 import { AppState } from "src/app/store/app.state";
-import { addPost, addPostSuccess, deletePost, deletePostSuccess, loadPosts, loadPostsSuccess, updatePost, updatePostSuccess } from "./posts.actions";
+import { addPost, addPostSuccess, deletePost, deletePostSuccess, dummyAction, loadPosts, loadPostsSuccess, updatePost, updatePostSuccess } from "./posts.actions";
+import { getPosts } from "./posts.selector";
 
 @Injectable()
 export class PostsEffects { 
@@ -22,14 +23,17 @@ export class PostsEffects {
     getAllPosts$ = createEffect(() =>
         this.action$.pipe(
             ofType(loadPosts),
-            mergeMap((action) => {
-                console.log(action);
+            withLatestFrom(this.store.select(getPosts)),
+            mergeMap(([action, posts]) => {
+                if (!posts.length || posts.length === 1) { 
                 return this.postsService.getPosts()
                     .pipe(
                         map(posts => { 
                             return loadPostsSuccess({posts})
                         })
                     );
+                }
+                return of(dummyAction());
             })
         )
     )
@@ -99,7 +103,9 @@ export class PostsEffects {
             map((r: RouterNavigatedAction) => { 
                 return r.payload.routerState['params']['id']
             }),
-            switchMap(id => { 
+            withLatestFrom(this.store.select(getPosts)),
+            switchMap(([id, post]) => { 
+                if (!post.length) { 
                 return this.postsService.getPostById(id)
                     .pipe(
                         map((post) => { 
@@ -107,6 +113,8 @@ export class PostsEffects {
                             return loadPostsSuccess({posts:postData})
                         })
                     )
+                }
+                return of(dummyAction());
             })
         )
     )
