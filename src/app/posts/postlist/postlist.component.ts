@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { Post } from 'src/app/models/post.model';
+import { PostsService } from 'src/app/services/posts.service';
 import { AppState } from 'src/app/store/app.state';
 import { deletePost, loadPosts } from '../store/posts.actions';
 import { getPostCount, getPosts, getPostsEntities } from '../store/posts.selector';
@@ -14,12 +15,16 @@ import { getPostCount, getPosts, getPostsEntities } from '../store/posts.selecto
 export class PostlistComponent implements OnInit {
   posts$!: Observable<Post[]>;
   postCount$: Observable<Post | number>;
-  constructor(private store:Store<AppState>) { }
+  constructor(
+    private store: Store<AppState>,
+    private postService:PostsService,
+  ) { }
 
   ngOnInit(): void {
-    this.posts$ = this.store.select(getPosts);
-    this.store.dispatch(loadPosts());
-    this.postCount$ = this.store.select(getPostCount);
+    this.posts$ =this.postService.entities$
+    //this.posts$ = this.store.select(getPosts);
+    //this.store.dispatch(loadPosts());
+    // this.postCount$ = this.store.select(getPostCount);
   }
 
   onDeletePost(postId) {

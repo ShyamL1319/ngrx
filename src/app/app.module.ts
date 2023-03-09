@@ -17,6 +17,10 @@ import { AuthInterceptor } from './shared/interceptor/auth.interceptor';
 import { LoadingInterceptor } from './shared/interceptor/loading.interceptor';
 import { StoreRouterConnectingModule } from "@ngrx/router-store"
 import { CustomSerializer } from './store/router/custom-serializer';
+import { EntityDataModule, EntityDataService } from '@ngrx/data';
+import { entityConfig } from './post-entity-metadata';
+import { PostsDataService } from './services/posts-data-service';
+import { PostsResolver } from './posts/resolver/posts..resolver';
 @NgModule({
   declarations: [
     AppComponent,
@@ -36,6 +40,7 @@ import { CustomSerializer } from './store/router/custom-serializer';
     StoreDevtoolsModule.instrument({
       logOnly: environment.production
     }),
+    EntityDataModule.forRoot(entityConfig),
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,
@@ -45,7 +50,17 @@ import { CustomSerializer } from './store/router/custom-serializer';
     provide: HTTP_INTERCEPTORS,
     useClass: LoadingInterceptor,
     multi:true
-  }],
+    },
+    PostsDataService,
+    PostsResolver
+  ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule { 
+  constructor(
+    postsDataService: PostsDataService,
+    entityDataService : EntityDataService
+  ) {
+    entityDataService.registerService('Post', postsDataService);
+  }
+}

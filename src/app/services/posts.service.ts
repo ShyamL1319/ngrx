@@ -1,14 +1,17 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { EntityCollectionServiceBase, EntityCollectionServiceElementsFactory } from '@ngrx/data';
 import { map, Observable } from 'rxjs';
 import { Post } from '../models/post.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class PostsService {
+export class PostsService extends EntityCollectionServiceBase<Post>{
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private serviceElementFactory: EntityCollectionServiceElementsFactory) {
+    super('Post', serviceElementFactory);
+   }
   
   getPosts():Observable<Post[]> { 
     return this.http.get<Post[]>(`https://myprojectdemo-2f5f5-default-rtdb.firebaseio.com/posts.json`)

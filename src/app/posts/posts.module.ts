@@ -11,6 +11,7 @@ import { PostsEffects } from "./store/posts.effects";
 import { postReducer } from "./store/posts.reducer";
 import { POST_STATE_NAME } from "./store/posts.selector";
 import { SignglePostComponent } from './signgle-post/signgle-post.component';
+import { PostsResolver } from "./resolver/posts..resolver";
 
 const routes: Routes = [
       {
@@ -19,7 +20,8 @@ const routes: Routes = [
         children: [
             { path: "add", component: AddPostComponent },
             { path: "edit/:id", component: EditPostComponent },
-        ]
+        ],
+        resolve: {posts: PostsResolver}
     },
 ]
 
@@ -37,6 +39,6 @@ const routes: Routes = [
         ReactiveFormsModule,
         StoreModule.forFeature(POST_STATE_NAME, postReducer),
         EffectsModule.forFeature([PostsEffects])
-    ]
+    ],
 })
 export class PostsModuls { }
