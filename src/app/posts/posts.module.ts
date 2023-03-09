@@ -14,6 +14,7 @@ import { SignglePostComponent } from './signgle-post/signgle-post.component';
 import { PostsResolver } from "./resolver/posts..resolver";
 import { EntityDataModule, EntityDataService, EntityDefinition, EntityDefinitionService, EntityMetadataMap } from "@ngrx/data";
 import { PostsDataService } from "../services/posts-data.service";
+import { Post } from "../models/post.model";
 
 const routes: Routes = [
       {
@@ -40,8 +41,17 @@ const routes: Routes = [
     },
 ]
 
+export function sortByName(a:Post, b:Post):number { 
+    return a.title.localeCompare(b.title);
+}
+
+export function sortById(a:Post, b:Post):number { 
+    return a.id.localeCompare(b.id);
+} 
+
 export const entityMetadata: EntityMetadataMap = {
     Post: {
+        sortComparer: sortByName,
         entityDispatcherOptions: {
             optimisticUpdate: true,
             optimisticDelete: true,
