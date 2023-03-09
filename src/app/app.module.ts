@@ -19,7 +19,7 @@ import { StoreRouterConnectingModule } from "@ngrx/router-store"
 import { CustomSerializer } from './store/router/custom-serializer';
 import { EntityDataModule, EntityDataService } from '@ngrx/data';
 import { entityConfig } from './post-entity-metadata';
-import { PostsDataService } from './services/posts-data-service';
+import { PostsDataService } from './services/posts-data.service';
 import { PostsResolver } from './posts/resolver/posts..resolver';
 @NgModule({
   declarations: [
