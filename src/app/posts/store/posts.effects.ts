@@ -4,7 +4,7 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { Update } from "@ngrx/entity";
 import { RouterNavigatedAction, ROUTER_NAVIGATION } from "@ngrx/router-store";
 import { Store } from "@ngrx/store";
-import { filter, map, mergeMap, of, switchMap, take, tap, withLatestFrom } from "rxjs";
+import { distinct, distinctUntilChanged, distinctUntilKeyChanged, filter, map, mergeMap, of, switchMap, take, tap, withLatestFrom } from "rxjs";
 import { Post } from "src/app/models/post.model";
 import { PostsService } from "src/app/services/posts.service";
 import { AppState } from "src/app/store/app.state";
@@ -72,8 +72,8 @@ export class PostsEffects {
     )
     delete$ = createEffect(() =>
         this.action$.pipe(
-            take(1),
             ofType(deletePost),
+            distinctUntilKeyChanged("id"),
             switchMap((action) => {
                 return this.postsService
                     .deletePost(action.id).pipe(
@@ -85,7 +85,7 @@ export class PostsEffects {
         )
     )
 
-    deletePostREdirect$ = createEffect(
+    deletePostRedirect$ = createEffect(
     () => this.action$.pipe(
         ofType(deletePostSuccess,updatePostSuccess),
         tap((action) => {                

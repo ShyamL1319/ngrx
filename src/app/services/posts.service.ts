@@ -36,7 +36,7 @@ export class PostsService {
     return this.http.patch<any>(`https://myprojectdemo-2f5f5-default-rtdb.firebaseio.com/posts.json`,postData)
   }
 
-  deletePost(id: string) { 
+  deletePost(id: string) {
     return this.http.delete(`https://myprojectdemo-2f5f5-default-rtdb.firebaseio.com/posts/${id}.json`);
   }
   getPostById(id: string):Observable<Post> { 

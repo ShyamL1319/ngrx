@@ -10,7 +10,9 @@ const _postReducer = createReducer(initialState,
         return postAdapter.updateOne(action.post,state)
     }),
     on(deletePostSuccess, (state, action) => {
-        return postAdapter.removeOne(action.id, { ...state, count:state.count - 1 });
+        const entity = state.entities[action.id];
+        const updatedCount = entity ? state.count - 1 : state.count; 
+        return postAdapter.removeOne(action.id, { ...state, count:updatedCount });
     }),
     on(loadPostsSuccess, (state, action) => { 
         return postAdapter.setAll(action.posts, { ...state, count: action.posts.length});
