@@ -40,7 +40,7 @@ import { PostsResolver } from './posts/resolver/posts..resolver';
     StoreDevtoolsModule.instrument({
       logOnly: environment.production
     }),
-    EntityDataModule.forRoot(entityConfig),
+    EntityDataModule.forRoot({}),
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,
@@ -51,16 +51,10 @@ import { PostsResolver } from './posts/resolver/posts..resolver';
     useClass: LoadingInterceptor,
     multi:true
     },
-    PostsDataService,
-    PostsResolver
   ],
   bootstrap: [AppComponent]
 })
 export class AppModule { 
-  constructor(
-    postsDataService: PostsDataService,
-    entityDataService : EntityDataService
-  ) {
-    entityDataService.registerService('Post', postsDataService);
+  constructor() {
   }
 }

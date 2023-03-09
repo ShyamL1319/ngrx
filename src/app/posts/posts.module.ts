@@ -12,19 +12,43 @@ import { postReducer } from "./store/posts.reducer";
 import { POST_STATE_NAME } from "./store/posts.selector";
 import { SignglePostComponent } from './signgle-post/signgle-post.component';
 import { PostsResolver } from "./resolver/posts..resolver";
+import { EntityDataModule, EntityDataService, EntityDefinition, EntityDefinitionService, EntityMetadataMap } from "@ngrx/data";
+import { PostsDataService } from "../services/posts-data.service";
 
 const routes: Routes = [
       {
         path: "",
         component: PostlistComponent,
         children: [
-            { path: "add", component: AddPostComponent },
-            { path: "edit/:id", component: EditPostComponent },
+            {
+                path: "add",
+                component: AddPostComponent,
+                resolve: { posts: PostsResolver }
+            },
+            {
+                path: "edit/:id",
+                component: EditPostComponent,
+                resolve: { posts: PostsResolver }
+            },
+            {
+                path: "details/:id",
+                component: SignglePostComponent,
+                resolve: {posts: PostsResolver}
+            },
         ],
         resolve: {posts: PostsResolver}
     },
 ]
 
+export const entityMetadata: EntityMetadataMap = {
+    Post: {
+        entityDispatcherOptions: {
+            optimisticUpdate: true,
+            optimisticDelete: true,
+            optimisticAdd: false,
+        }
+    },
+} 
 @NgModule({
     declarations: [
         PostlistComponent,
@@ -37,8 +61,21 @@ const routes: Routes = [
         RouterModule.forChild(routes),
         FormsModule,
         ReactiveFormsModule,
-        StoreModule.forFeature(POST_STATE_NAME, postReducer),
-        EffectsModule.forFeature([PostsEffects])
+        // StoreModule.forFeature(POST_STATE_NAME, postReducer),
+        // EffectsModule.forFeature([PostsEffects]),
     ],
+    providers: [
+        PostsDataService,
+        PostsResolver
+    ]
 })
-export class PostsModuls { }
+export class PostsModuls {
+    constructor(
+        eds: EntityDefinitionService,
+        entityDataService : EntityDataService,
+        postsDataService: PostsDataService,
+    ) {
+        eds.registerMetadataMap(entityMetadata);
+        entityDataService.registerService('Post',postsDataService)
+    }
+ }

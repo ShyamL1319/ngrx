@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
+import { PostsResolver } from './posts/resolver/posts..resolver';
 import { SignglePostComponent } from './posts/signgle-post/signgle-post.component';
 import { AuthGuard } from './shared/guards/auth.guard';
 
@@ -14,10 +15,6 @@ const routes: Routes = [
     path: "posts",
     loadChildren: () => import('./posts/posts.module').then(m => m.PostsModuls),
     canActivate:[AuthGuard]
-  },
-  {
-    path: "posts/details/:id",
-    component:SignglePostComponent
   },
   {
     path: 'auth',
